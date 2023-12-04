@@ -40,23 +40,27 @@ app.get("/recommendations", async (req, res) => {
     const topArtists = await getTopItems(accessToken, "artists", 3);
     const seedArtists = await getItemSeed(topArtists.items);
 
-    const response = await getRecommendations(
+    const recommendedData = await getRecommendations(
       accessToken,
       seedArtists,
       seedTracks,
       target_valence
     );
-    const recommendedTracks = getRecommendedTracks(response);
-    console.log(recommendedTracks);
-    
-    const userInfo = await getUserID(accessToken);
-    console.log("getUserID");
-    console.log(userInfo);
+    const recommendedTracks = getRecommendedTracks(recommendedData);
+    // console.log(recommendedTracks);
 
-    const playlist = await createPlaylist(accessToken, userInfo.id, "test playlist");
+    const userInfo = await getUserID(accessToken);
+    // console.log("getUserID");
+    // console.log(userInfo);
+
+    const playlist = await createPlaylist(
+      accessToken,
+      userInfo.id,
+      "test playlist"
+    );
     addTracksToPlaylist(accessToken, playlist.id, recommendedTracks);
 
-    res.json(response);
+    res.json(playlist);
   } catch (error) {
     console.error("Error during results:", error);
     res.status(500).send("Internal Server Error");
@@ -84,22 +88,30 @@ const createPlaylist = async (accessToken, userID, playlistName) => {
 
 const addTracksToPlaylist = async (accessToken, playlistID, tracks) => {
   const ADD_TRACKS_TO_PLAYLIST_ENDPOINT = `https://api.spotify.com/v1/playlists/${playlistID}/tracks`;
-  const trackURIs = tracks.map((track) => (track.uri)).join(",");
 
+  const trackURIs = tracks.map((track) => track.uri);
   console.log("trackURIs");
   console.log(trackURIs);
-  console.log(typeof trackURIs);
-  const response = await axios.post(
-    ADD_TRACKS_TO_PLAYLIST_ENDPOINT,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+
+  try {
+    const response = await axios.post(
+      ADD_TRACKS_TO_PLAYLIST_ENDPOINT,
+      {
+        uris: trackURIs,
       },
-    },
-    {
-      uris: trackURIs,
-    }
-  );
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("Successfully added tracks to the playlist:", response.data);
+  } catch (error) {
+    console.error("Error adding tracks to the playlist:", error.message);
+    throw error; // Propagate the error to the caller if needed
+  }
 };
 
 const getRecommendedTracks = (recommendations) => {
