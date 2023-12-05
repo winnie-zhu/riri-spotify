@@ -1,4 +1,6 @@
+
 require('dotenv').config();
+console.log('Environment variables:', process.env);
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
@@ -31,11 +33,13 @@ app.get("/login", (req, res) => {
   }
 });
 
+
+
 app.get("/recommendations", async (req, res) => {
   try {
     const { accessToken, target_valence } = req.query;
 
-    const topTracks = await getTopItems(req.query.accessToken, "tracks", 2);
+    const topTracks = await getTopItems(accessToken, "tracks", 2);
     const seedTracks = await getItemSeed(topTracks.items);
     const topArtists = await getTopItems(accessToken, "artists", 3);
     const seedArtists = await getItemSeed(topArtists.items);
