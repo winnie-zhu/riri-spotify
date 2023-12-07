@@ -10,8 +10,8 @@ function Result() {
   const isMounted = useRef(false);
   useEffect(() => {
     if (!isMounted.current){
-      isMounted.current = true;
-      const getResults = async () => {
+        isMounted.current = true;
+        const getResults = async () => {
         try {
           const accessToken = localStorage.getItem('accessToken');
           
@@ -20,7 +20,7 @@ function Result() {
           console.log("Existing Playlist results page:", existingPlaylist);
           if (existingPlaylist) {
             setResults(existingPlaylist);
-            setLoading(false);
+            setLoading(false); //
             return;
   
           } 
@@ -33,12 +33,15 @@ function Result() {
             `http://localhost:8888/recommendations?accessToken=${accessToken}&target_valence=${targetVariance}`
           );
             
-         
-            
             localStorage.setItem("existingPlaylist", JSON.stringify(response.data));
-  
             setResults(response.data);
+            
+
+
+
+
             setLoading(false);
+
            
     
         }catch (err) {
@@ -53,19 +56,14 @@ function Result() {
     
   }, []);
 
-  /*<h1>Results</h1>
-  {results && (
-    <div>
-      <pre>{JSON.stringify(results, null, 2)}</pre>
-    </div>
-  )}*/
 
-  /*{results && (
-    <div>
-      <pre>{JSON.stringify(results, null, 2)}</pre>
-    </div> 
-  )}*/
+    /*{results && (
+      <div>
+        <pre>{JSON.stringify(results, null, 2)}</pre>
+      </div> 
+    )}*/
 
+  
   return (
     <>
      <h1>Results</h1>
@@ -78,11 +76,29 @@ function Result() {
             </div>
           )}
           {results.external_urls && (
-            <h2>Spotify Playlist Link: <a href={results.external_urls.spotify} target="_blank" rel="noopener noreferrer">{results.external_urls.spotify}</a></h2>
+                  <h2>Spotify Playlist Link: <a href={results.external_urls.spotify} target="_blank" rel="noopener noreferrer">{results.external_urls.spotify}</a></h2>
+
           )}
-    
-          
       </div>
+      
+      {loading && <p>Loading...</p>}
+
+      
+      {results && !loading && !error && (
+        <div>
+          <iframe
+            style={{ borderRadius: '12px' }}
+            src={`https://open.spotify.com/embed/playlist/${results.id}?utm_source=generator`}
+            width="100%"
+            height="352"
+            frameBorder="0"
+            allowFullScreen
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="eager"
+          ></iframe>
+        </div>
+      )}
+      
       
       
       

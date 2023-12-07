@@ -78,7 +78,7 @@ const createPlaylist = async (accessToken, userID, playlistName) => {
   const response = await axios.post(
     CREATE_PLAYLIST_ENDPOINT,
     {
-      name: "test playlist2",
+      name: "Your playlist",
     },
     {
       headers: {
