@@ -1,46 +1,56 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 function Result() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  
 
+  const isMounted = useRef(false);
   useEffect(() => {
-    const getResults = async () => {
-      try {
-        const accessToken = localStorage.getItem('accessToken');
-
-        const existingPlaylist = JSON.parse(localStorage.getItem("existingPlaylist"));
-        if (existingPlaylist) {
-          setResults(existingPlaylist);
-          setLoading(false);
-        } else {
+    if (!isMounted.current){
+      isMounted.current = true;
+      const getResults = async () => {
+        try {
+          const accessToken = localStorage.getItem('accessToken');
+          
+          
+          const existingPlaylist = JSON.parse(localStorage.getItem("existingPlaylist"));
+          console.log("Existing Playlist results page:", existingPlaylist);
+          if (existingPlaylist) {
+            setResults(existingPlaylist);
+            setLoading(false);
+            return;
+  
+          } 
+            
           let targetVariance = location.state ? location.state.targetVariance : 0.5;
-
+  
           targetVariance = Math.min(1, Math.max(0, parseFloat(targetVariance)));
-
-          /*const response = await axios.get("http://localhost:8888/results", {
-              headers: {
-                  Authorization: `Bearer ${accessToken}`,
-              },
-          });*/
-
+  
           const response = await axios.get(
             `http://localhost:8888/recommendations?accessToken=${accessToken}&target_valence=${targetVariance}`
           );
-
-          setResults(response.data);
-          setLoading(false);
-          localStorage.setItem("existingPlaylist", JSON.stringify(response.data));
-
-        }
-        
-      } catch (err) {
-        setError(true);
+            
+         
+            
+            localStorage.setItem("existingPlaylist", JSON.stringify(response.data));
+  
+            setResults(response.data);
+            setLoading(false);
+           
+    
+        }catch (err) {
+          setError(true);
+        }  
       }
-    };
-    getResults();
+
+          getResults();
+    }   
+    
+    //console.log('Results page- before calling getResults()');
+    
   }, []);
 
   /*<h1>Results</h1>

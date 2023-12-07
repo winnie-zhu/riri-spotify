@@ -41,7 +41,7 @@ function Home() {
   }
   //change 3 and 4
   const handleInputChange = (event) => {
-    // Validate and normalize the input to ensure it's a valid number between 0 and 1
+    //valid number between 0 and 1
     const inputValue = parseFloat(event.target.value);
     if (!isNaN(inputValue) && inputValue >= 0 && inputValue <= 1) {
       setTargetVariance(inputValue);
@@ -49,12 +49,12 @@ function Home() {
   };
 
   const handleLinkClick = () => {
-    // Validate the input or perform any other necessary checks
+
     if (targetVariance !== "") {
-      // Navigate to the Results component with the targetVariance in state
+      console.log('before navigate');
       navigate("/results", { state: { targetVariance: targetVariance } });
     } else {
-      // Handle invalid input or show an error message
+  
       console.error("Invalid input for targetVariance");
     }
   };
@@ -73,7 +73,7 @@ function Home() {
         <>
           Enter your mood (0 to 1):
           <input type="number" step="0.1" value={targetVariance} onChange={handleInputChange} />
-          {/* Use a button or any other UI element to trigger the link */}
+          
           <button onClick={handleLinkClick}>Go to Results</button>
           <button onClick={handleLogout}>Logout</button>
         </>
