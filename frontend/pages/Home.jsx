@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; //
+<<<<<<< HEAD
 import "./design.css"
+=======
+import moods from "./mood-faces-home.png"
+import logo from "./logo.png"
+>>>>>>> 72a345a17fbf5f876b868ad63e4170f0899193b3
 
 const extractURLParams = (url) => {
   const params = new URLSearchParams(url.split("#")[1]);
@@ -69,10 +74,12 @@ function Home() {
   };
   return (
     <>
-      
-      
-      
-
+    <img 
+      height={"20px"}
+      src={logo} 
+      className="logo">
+    </img>
+      <h1>Home</h1>
       {loggedIn ? (
         <>
           <h1 class="title">Moodtunes</h1>
@@ -113,17 +120,31 @@ function Home() {
 
           Enter your mood (0 to 1):
           <input type="number" step="0.1" value={targetValence} onChange={handleInputChange} />
+<<<<<<< HEAD
          
           <div class="button-container">
             <button class="generate-button" onClick={handleLinkClick}>Generate playlist</button>
           </div>
 
          
+=======
+          
+          <button onClick={handleLinkClick}>Go to Results</button>
+>>>>>>> 72a345a17fbf5f876b868ad63e4170f0899193b3
           <button onClick={handleLogout}>Logout</button>
         </>
       ) : (
-        <Link to="/login">Login</Link>
+        <button 
+        className="login-home-button"> 
+          <Link to="/login">Login</Link>
+        </button>
       )}
+      <div> 
+        <img width={"500px"} 
+          src={moods} 
+          className="moods-home"> 
+          </img>
+        </div>
     </>
   );
 }
