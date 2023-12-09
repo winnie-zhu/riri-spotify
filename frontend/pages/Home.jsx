@@ -16,6 +16,10 @@ const extractURLParams = (url) => {
 function Home() {
   const [loggedIn, setLoggedIn] = useState(false);
 
+  const handleLogin = async () => {
+    window.location = "http://localhost:8888/login";
+  };
+
   //change 2
   const [targetValence, setTargetValence] = useState(0);
   const navigate = useNavigate();
@@ -129,13 +133,15 @@ function Home() {
               Generate playlist
             </button>
           </div>
-          {/* <button onClick={handleLinkClick}>Go to Results</button> */}
           <button onClick={handleLogout}>Logout</button>
         </>
       ) : (
+        // <>
+
+        // </>
         <div className="logged-in">
           <img width={"500px"} src={moods} className="moods-home"></img>
-          <Link to="/login">Login</Link>
+          <button onClick={handleLogin}>Login with Spotify</button>
         </div>
       )}
     </>
