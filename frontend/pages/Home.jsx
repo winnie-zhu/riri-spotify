@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; //
+import "./design.css"
 
 const extractURLParams = (url) => {
   const params = new URLSearchParams(url.split("#")[1]);
@@ -68,13 +69,56 @@ function Home() {
   };
   return (
     <>
-      <h1>Home</h1>
+      
+      
+      
+
       {loggedIn ? (
         <>
+          <h1 class="title">Moodtunes</h1>
+
+    <div id="mood-buttons">
+
+
+      <div class="mood-button">
+        <img class="mood" src="../src/assets/img/0.1.png" alt="Button 1" />
+        <p class="mood-name">crying</p>
+      </div>
+
+
+      <div class="mood-button">
+        <img class="mood" src="../src/assets/img/0.3.png" alt="Button 2" />
+        <p class="mood-name">sad</p>
+      </div>
+
+
+      <div class="mood-button">
+        <img class="mood" src="../src/assets/img/0.5.png" alt="Button 3" />
+        <p class="mood-name">chill</p>
+      </div>
+
+
+      <div class="mood-button">
+        <img class="mood" src="../src/assets/img/0.7.png" alt="Button 4" />
+        <p class="mood-name">happy</p>
+      </div>
+
+
+      <div class="mood-button">
+        <img class="mood" src="../src/assets/img/0.9.png" alt="Button 5" />
+        <p class="mood-name">ecstatic</p>
+      </div>
+    </div>
+
+
           Enter your mood (0 to 1):
           <input type="number" step="0.1" value={targetValence} onChange={handleInputChange} />
-          
-          <button onClick={handleLinkClick}>Go to Results</button>
+         
+          <div class="button-container">
+            <button class="generate-button" onClick={handleLinkClick}>Generate playlist</button>
+          </div>
+
+         
           <button onClick={handleLogout}>Logout</button>
         </>
       ) : (
