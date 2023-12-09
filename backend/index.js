@@ -21,6 +21,20 @@ const SCOPES = [
   "user-top-read",
 ];
 
+const MOODS = {
+  '0': 'sad',
+  '0.1': "somber",
+  '0.2': "depressed",
+  '0.3': "melancholy",
+  '0.4': "calm",
+  '0.5': "neutral",
+  '0.6': "excited",
+  '0.7': "happy",
+  '0.8': "joyful",
+  '0.9': "euphoric",
+  '1': "blissful",
+};
+
 const SCOPES_URL_PARAM = SCOPES.join("%20");
 app.get("/login", (req, res) => {
   try {
@@ -37,7 +51,7 @@ app.get("/login", (req, res) => {
 
 app.get("/recommendations", async (req, res) => {
   try {
-    const { accessToken, target_valence } = req.query;
+    const { accessToken, targetValence } = req.query;
 
     const topTracks = await getTopItems(accessToken, "tracks", 2);
     const seedTracks = await getItemSeed(topTracks.items);
@@ -48,19 +62,20 @@ app.get("/recommendations", async (req, res) => {
       accessToken,
       seedArtists,
       seedTracks,
-      target_valence
+      targetValence
     );
     const recommendedTracks = getRecommendedTracks(recommendedData);
-    // console.log(recommendedTracks);
 
     const userInfo = await getUserID(accessToken);
-    // console.log("getUserID");
-    // console.log(userInfo);
+
+    // console.log("target valence",targetValence)
+    // console.log(MOODS[targetValence])
 
     const playlist = await createPlaylist(
       accessToken,
       userInfo.id,
-      "test playlist"
+      `your ${MOODS[targetValence]} playlist`,
+      targetValence
     );
     addTracksToPlaylist(accessToken, playlist.id, recommendedTracks);
 
@@ -71,14 +86,15 @@ app.get("/recommendations", async (req, res) => {
   }
 });
 
-const createPlaylist = async (accessToken, userID, playlistName) => {
+const createPlaylist = async (accessToken, userID, playlistName, valence) => {
   const CREATE_PLAYLIST_ENDPOINT = `https://api.spotify.com/v1/users/${userID}/playlists`;
   console.log("CREATE_PLAYLIST_ENDPOINT");
   console.log(CREATE_PLAYLIST_ENDPOINT);
   const response = await axios.post(
     CREATE_PLAYLIST_ENDPOINT,
     {
-      name: "Your playlist",
+      name: playlistName,
+      description: `Created by MoodTunes with a target valence of ${valence}`,
     },
     {
       headers: {
@@ -114,7 +130,7 @@ const addTracksToPlaylist = async (accessToken, playlistID, tracks) => {
     console.log("Successfully added tracks to the playlist:", response.data);
   } catch (error) {
     console.error("Error adding tracks to the playlist:", error.message);
-    throw error; // Propagate the error to the caller if needed
+    throw error;
   }
 };
 
@@ -170,7 +186,6 @@ const getUserID = async (accessToken) => {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  // const data = response.data;
   return response.data;
 };
 

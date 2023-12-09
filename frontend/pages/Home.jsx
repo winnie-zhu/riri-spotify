@@ -14,7 +14,7 @@ function Home() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   //change 2
-  const [targetVariance, setTargetVariance] = useState("");
+  const [targetValence, setTargetValence] = useState(0);
   const navigate = useNavigate();
   //
   
@@ -44,18 +44,19 @@ function Home() {
     //valid number between 0 and 1
     const inputValue = parseFloat(event.target.value);
     if (!isNaN(inputValue) && inputValue >= 0 && inputValue <= 1) {
-      setTargetVariance(inputValue);
+      setTargetValence(inputValue);
+      
     }
   };
 
   const handleLinkClick = () => {
 
-    if (targetVariance !== "") {
-      console.log('before navigate');
-      navigate("/results", { state: { targetVariance: targetVariance } });
+    if (!targetValence.isNaN) {
+      localStorage.setItem("targetValence", targetValence);
+      navigate("/results");
     } else {
   
-      console.error("Invalid input for targetVariance");
+      console.error("Invalid input for targetValence");
     }
   };
   
@@ -65,14 +66,13 @@ function Home() {
     localStorage.clear();
     setLoggedIn(false);
   };
-  //<Link to="/results">Results</Link>
   return (
     <>
       <h1>Home</h1>
       {loggedIn ? (
         <>
           Enter your mood (0 to 1):
-          <input type="number" step="0.1" value={targetVariance} onChange={handleInputChange} />
+          <input type="number" step="0.1" value={targetValence} onChange={handleInputChange} />
           
           <button onClick={handleLinkClick}>Go to Results</button>
           <button onClick={handleLogout}>Logout</button>
