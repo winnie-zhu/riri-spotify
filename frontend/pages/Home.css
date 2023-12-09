@@ -26,6 +26,8 @@ body{
 
 }
 
+
+
 .login-home-button {
     background-color: #F85F5F;
     border-radius: 15px;
@@ -43,3 +45,10 @@ body{
     transition: transform 0.3s ease;
 }
 
+
+
+.logged-in{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
