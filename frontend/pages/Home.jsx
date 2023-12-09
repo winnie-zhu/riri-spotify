@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; //
+import moods from "./mood-faces-home.png"
+import logo from "./logo.png"
 
 const extractURLParams = (url) => {
   const params = new URLSearchParams(url.split("#")[1]);
@@ -68,6 +70,11 @@ function Home() {
   };
   return (
     <>
+    <img 
+      height={"20px"}
+      src={logo} 
+      className="logo">
+    </img>
       <h1>Home</h1>
       {loggedIn ? (
         <>
@@ -78,8 +85,17 @@ function Home() {
           <button onClick={handleLogout}>Logout</button>
         </>
       ) : (
-        <Link to="/login">Login</Link>
+        <button 
+        className="login-home-button"> 
+          <Link to="/login">Login</Link>
+        </button>
       )}
+      <div> 
+        <img width={"500px"} 
+          src={moods} 
+          className="moods-home"> 
+          </img>
+        </div>
     </>
   );
 }
